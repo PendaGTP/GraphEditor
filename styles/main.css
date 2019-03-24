@@ -1,0 +1,12 @@
+#canvas {
+    border: 5px solid rgb(56, 56, 61);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    display: block;
+  }
+#optionsButton{
+    display: none;
+}
+
+
