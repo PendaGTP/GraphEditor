@@ -1,11 +1,9 @@
 function main() {
-
-
-    var length = 600;
+    var length = 600; // Taille du canevas
     var context = initCanvas(length);
     var graph = new Graph();
 
-
+    // Ajout des écouteurs d'événement
     document.getElementById('canvas').addEventListener('mouseup', function () { onMouseUp(event, graph); });
     document.getElementById('canvas').addEventListener('contextmenu', function () { createMenu(event, graph); });
     document.getElementById('canvas').addEventListener('mousedown', function () { onMouseDown(event, graph); });
@@ -13,11 +11,9 @@ function main() {
     document.getElementById('export').addEventListener('click', function () { exportGraph(graph); });
     document.getElementById('fileInput').addEventListener('change', function () { readFile(event, graph); });
     document.getElementById('oriente').addEventListener('click', function () { changerOriente(graph); });
-    
     document.addEventListener('keypress', function(){ onKeyPress(event, graph); });
     var interval = window.setInterval(function () { draw(graph, context, length); }, 10);
     document.getElementById('resetGraph').addEventListener('click', function () { resetGraph(graph,interval); });
-
 }
 
 function initCanvas(length) {
@@ -27,7 +23,7 @@ function initCanvas(length) {
     return canvas.getContext('2d');
 }
 
-
+// Création des sommets
 function creerSommet(pos, graph) {
     if (graph.listeSommet.length == 0) {
         var newSommet = new Sommet(pos, graph);
@@ -48,6 +44,7 @@ function creerSommet(pos, graph) {
     return newSommet
 }
 
+// Détection des collisions entre sommets
 function isCollision(i, pos, graph, creation) {
     if (creation && graph.listeSommet[i] != null) {
         return Math.sqrt(Math.pow(pos[0] - graph.listeSommet[i].positionX, 2) + Math.pow(pos[1] - graph.listeSommet[i].positionY, 2)) < 2 * graph.ballSize;
@@ -56,8 +53,7 @@ function isCollision(i, pos, graph, creation) {
     }
 }
 
-
-
+// Changement de la vue : orienté, pas orienté
 function changerOriente(graph) {
     if (document.getElementById('oriente').checked) {
         graph.graphOriente = true;
@@ -70,21 +66,21 @@ function changerOriente(graph) {
 
 }
 
+// Gestion de l'évenement mouseDown : vérification colision
 function onMouseDown(e, graph) {
-
     var pos = getPosition(e);
     graph.posClick = pos;
     graph.mouseDown = true;
-
     for (var i = 0; i < graph.listeSommet.length; i++) {
         if (isCollision(i, pos, graph, false)) {
             graph.whichMoving = graph.listeSommet[i];
             graph.collision = true;
         }
     }
-
 }
 
+
+// Gestion de l'évenement mouseUp : vérification colision, même position, ajout sommet  
 function onMouseUp(e, graph) {
 
     var sommet;
@@ -123,14 +119,11 @@ function onMouseUp(e, graph) {
             graph.isSommetSelected = false;
             graph.sommetSelected = [];
         }
-
-
     }
-
 }
 
+// Gestion de l'événement mouseMove : déplacement des sommets
 function onMouseMove(event, graph) {
-
     if (graph.mouseDown && graph.collision && graph.whichMoving != null) {
         graph.whichMoving.positionX = getPosition(event)[0];
         graph.whichMoving.positionY = getPosition(event)[1];
@@ -144,11 +137,13 @@ function onMouseMove(event, graph) {
     }
 }
 
+// Création des liens
 function creerLien(graph) {
     new Lien(graph, graph.sommetSelected[0], graph.sommetSelected[1]);
 
 }
 
+// Récupération de la position de la souris
 function getPosition(e) {
     var rect = e.target.getBoundingClientRect();
     var x = e.clientX - rect.left;
@@ -156,6 +151,7 @@ function getPosition(e) {
     return [x, y];
 }
 
+// Dessin des formes
 function draw(graph, ctx, length) {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, length, length);
@@ -163,6 +159,7 @@ function draw(graph, ctx, length) {
     drawLiens(graph, ctx);
 }
 
+// Dessin des sommets
 function drawSommets(graph, ctx) {
     for (var i = 0; i < graph.listeSommet.length; i++) {
         if(graph.listeSommet[i] != null){
@@ -171,6 +168,7 @@ function drawSommets(graph, ctx) {
     }
 }
 
+// Dessins des liens
 function drawLiens(graph, ctx) {
     for (var i = 0; i < graph.listeLien.length; i++) {
         if(graph.listeLien[i] != null && graph.listeLien[i].sommetDeux != null && graph.listeLien[i].sommetUn != null) {
@@ -179,11 +177,17 @@ function drawLiens(graph, ctx) {
     }
 }
 
+// Réinitialiser le graph : suppression des sommets et des liens
 function resetGraph(graph,interval){
     for(var i = 0; i < graph.listeSommet.length; i++){
             sommet = graph.listeSommet[i]
             graph.listeSommet[i] = null;
         }
+    // A tester
+    //for (var j = 0; j < graph.listeLien.length; j++) {
+    //        graph.listeLien[j] = null;
+    //    } 
+    //}
     clearInterval(interval);
     main();
 }
@@ -192,11 +196,9 @@ function resetGraph(graph,interval){
 
 
 // *********** Renommer étiquette ***********
-// permet de renommer une étiquette
-
+// Récupération des touches claviers entrées
 function onKeyPress(e, graph){
     var key;
-    
     if(graph.isRename){
         if(e.keyCode == 13){
             graph.isRename = false;           
@@ -206,15 +208,12 @@ function onKeyPress(e, graph){
             get = window.event?event:e;
             key = get.keyCode?get.keyCode:get.charCode;
             key = String.fromCharCode(key);
-        
-            console.log(key);
             graph.tmpName += key
-        }
-        
-    }
-    
+        }    
+    }   
 }
 
+// Renommage des l'étiquettes
 function renameEtiquette(graph, pos){
     graph.isRename = true;
     for(var i = 0; i < graph.listeSommet.length; i++){
@@ -223,13 +222,13 @@ function renameEtiquette(graph, pos){
         }
     }
 }
-
+// *********** *********** ***********
 
 
 
 
 // *********** EXPORT ***********
-// Convertion de l'objet en json .. 
+// Convertion de l'objet en json .. : on met tout se qu'on à besoin dans graphJSON
 function graphToJSON(graph) {
     graphJSON = '{ "graph":{';
     var graphName = entergraphName(graph);
@@ -299,14 +298,13 @@ function exportGraph(graphJSON) {
     if (content){
         var blob = new Blob([content[0]], { type: "text/plain;charset=utf-8" });
         saveAs(blob, content[1] + ".json");
-    }else{
-
     }
-
 }
+// *********** *********** ***********
+
 
 // *********** IMPORT ***********
-
+// Lecture du fichier sélectionné puis transfert de la data à importJSON
 function readFile(e, graph) {
     var selectedFile = document.getElementById('fileInput').files[0];
     var reader = new FileReader();
@@ -314,10 +312,10 @@ function readFile(e, graph) {
         var content = reader.result;
         importJSON(content, graph);
     };
-
     reader.readAsText(selectedFile);
-
 }
+
+// Conversion du fichier JSON en data : import graph : sommets, liens, 
 function importJSON(data, graph) {
     var obj = JSON.parse(data);
     graph.name = obj.graph.name;
@@ -342,8 +340,9 @@ function importJSON(data, graph) {
         }
         new Lien(graph, tmpSommetUn, tmpSommetDeux);
     }
-
 }
+// *********** *********** ***********
+
 
 // ******************** Partie pour le menu contextuel ********************
 function createMenu(e, graph) {
@@ -453,7 +452,7 @@ function createMenu(e, graph) {
 }
 
 
-
+// La class Graph : elle représente le graphique 
 class Graph {
     constructor() {
         this.name = "nom_du_graphe"; // valeur par défaut
@@ -479,6 +478,7 @@ class Graph {
     }
 }
 
+// La classe sommet représente les sommets
 class Sommet {
     constructor(pos, graph) {
         this.positionX = pos[0];
@@ -488,8 +488,8 @@ class Sommet {
         graph.listeSommet.push(this);
     }
 
+    // Ici on dessine les sommets (rouge/jaune)
     draw(ctx, graph) {
-            
             if (this == graph.whichSelected) {
                 ctx.fillStyle = graph.selectedColor;
                 ctx.beginPath();
@@ -512,13 +512,11 @@ class Sommet {
                 
                 ctx.fillText(this.etiquette, this.positionX, this.positionY);
             }
-            ctx.fill();
-            
-            
-        }
-     
+            ctx.fill();             
+        } 
 }
 
+// La classe sommet représente les liens entre les sommets
 class Lien {
     constructor(graph, nodeA, nodeB) {
         this.sommetUn = nodeA;
@@ -528,7 +526,7 @@ class Lien {
 
 
     }
-
+    // Ici on s'occupe de calculer l'angle de la flèche
     recalculate() {
         if (this.sommetDeux.positionX > this.sommetUn.positionX && this.sommetDeux.positionY < this.sommetUn.positionY) {
             this.angleFleche = -Math.acos(Math.abs(this.sommetUn.positionX - this.sommetDeux.positionX) / Math.sqrt(Math.pow(this.sommetUn.positionX - this.sommetDeux.positionX, 2) + Math.pow(this.sommetUn.positionY - this.sommetDeux.positionY, 2)));
@@ -540,7 +538,7 @@ class Lien {
             this.angleFleche = -Math.acos(-Math.abs(this.sommetUn.positionX - this.sommetDeux.positionX) / Math.sqrt(Math.pow(this.sommetUn.positionX - this.sommetDeux.positionX, 2) + Math.pow(this.sommetUn.positionY - this.sommetDeux.positionY, 2)));
         }
     }
-
+    // Ici on déssine le lien (avec/sans) flèche
     draw(ctx, graph) {
         if(this.sommetDeux != null && this.sommetUn != null){
             ctx.fillStyle = "black";
