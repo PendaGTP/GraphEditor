@@ -314,11 +314,11 @@ function readFile(e, graph) {
         var content = reader.result;
         importJSON(content, graph);
     };
-
     reader.readAsText(selectedFile);
-
+    
 }
 function importJSON(data, graph) {
+    
     var obj = JSON.parse(data);
     graph.name = obj.graph.name;
     graph.graphOriente = obj.graph.directed;
