@@ -24,11 +24,26 @@
 </body>
 
 <input id="resetGraph" type="button" value="Tout effacer">
+<input id="pageRank" type="button" value="Algo PageRank">
 <div id="optionsButton">
     <input id="export" type="button" value="Exporter">
     <input type="file" id="fileInput" value="Importer"><label for="fichier a uploader">Importer votre fichier JSON</label>
     <input type="checkbox" id='oriente'>
 </div>
+
+<table id="tablePageRank">
+    <tr>
+        <th>
+            Page
+        </th>
+        <th>
+            PageRank
+        </th>
+        <th>
+            Classement
+        </th>
+    </tr>
+</table>
 
 <!-- Import du plugin pour le menu contextuel  -->
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>

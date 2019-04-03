@@ -12,8 +12,9 @@ function main() {
     document.getElementById('fileInput').addEventListener('change', function () { readFile(event, graph); });
     document.getElementById('oriente').addEventListener('click', function () { changerOriente(graph); });
     document.addEventListener('keypress', function(){ onKeyPress(event, graph); });
+    document.getElementById('pageRank').addEventListener('click', function () { pageRank(graph); });
     var interval = window.setInterval(function () { draw(graph, context, length); }, 10);
-    document.getElementById('resetGraph').addEventListener('click', function () { resetGraph(graph,interval); });
+    document.getElementById('resetGraph').addEventListener('click', function () { resetGraph(graph); });
 }
 
 function initCanvas(length) {
@@ -178,18 +179,23 @@ function drawLiens(graph, ctx) {
 }
 
 // Réinitialiser le graph : suppression des sommets et des liens
-function resetGraph(graph,interval){
+function resetGraph(graph){
+
     for(var i = 0; i < graph.listeSommet.length; i++){
-            sommet = graph.listeSommet[i]
-            graph.listeSommet[i] = null;
+        sommet = graph.listeSommet[i]
+        graph.listeSommet[i] = null;
+    }
+
+    for(var i = 0; i < graph.listeLien.length; i++){
+        if(graph.listeLien[i] != null){
+            if(sommet == graph.listeLien[i].sommetUn || sommet == graph.listeLien[i].sommetDeux){
+                graph.listeLien[i] = null;
+            }
+            
         }
-    // A tester
-    //for (var j = 0; j < graph.listeLien.length; j++) {
-    //        graph.listeLien[j] = null;
-    //    } 
-    //}
-    clearInterval(interval);
-    main();
+    }sommet = null;
+    graph.listeLien[i] = [];
+    graph.listeSommet[i] = [];
 }
     
     
@@ -223,7 +229,85 @@ function renameEtiquette(graph, pos){
     }
 }
 // *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********// *********** *********** ***********
+// *********** *********** ***********// *********** *********** ***********
+function pageRank(graph){
+    var tmpScalaire =0;
+    var it=0;
+    for (var j =0; j < graph.listeSommet.length; j++){
+        graph.listeSommet[j].valuePrePageRank =1/graph.listeSommet.length;
+        graph.listeSommet[j].valuePageRank = 1/graph.listeSommet.length;
+        var countPointe =0;
+        for (var i = 0; i < graph.listeLien.length; i++) {
+            if (graph.listeSommet[j] == graph.listeLien[i].sommetUn){
+                countPointe +=1;
+                graph.listeSommet[j].countPointer = countPointe;
+                //console.log('nbr de lien qui pointe vers sommet : '+graph.listeSommet[j].etiquette+' --- '+graph.listeSommet[j].countPointer);
+            }
+        }
+    }
 
+    while (tmpScalaire < 0.999999){
+        for (var j =0; j < graph.listeSommet.length; j++){
+            graph.listeSommet[j].valuePrePageRank = graph.listeSommet[j].valuePageRank;
+            var tmpPageRank = 0;
+            
+            for (var i = 0; i < graph.listeLien.length; i++) {
+                if (graph.listeSommet[j] == graph.listeLien[i].sommetDeux){
+                    tmpPageRank += graph.listeLien[i].sommetUn.valuePrePageRank / graph.listeLien[i].sommetUn.countPointer;
+                    //console.log('sommet : '+graph.listeSommet[j].etiquette+' tmpPageRank : '+tmpPageRank);
+                }
+            }  
+            if (tmpPageRank != 0){
+                    graph.listeSommet[j].valuePageRank = tmpPageRank;
+
+            }
+
+        }
+        
+        var tmpNormeU =0;
+        var tmpNormeV =0;
+        for (var j =0; j < graph.listeSommet.length; j++){
+            tmpNormeU += Math.pow(graph.listeSommet[j].valuePageRank,2);
+            tmpNormeV += Math.pow(graph.listeSommet[j].valuePrePageRank,2);
+
+            //console.log('pagerank '+graph.listeSommet[j].valuePageRank+' prepagerank'+graph.listeSommet[j].valuePrePageRank);
+            tmpScalaire += graph.listeSommet[j].valuePageRank * graph.listeSommet[j].valuePrePageRank;
+            
+        }
+        it++;
+        tmpNormeU = Math.sqrt(tmpNormeU);
+        tmpNormeV = Math.sqrt(tmpNormeV);
+        tmpScalaire = tmpScalaire / (tmpNormeU*tmpNormeV);                  
+        
+    }
+    for (var j =0; j < graph.listeSommet.length; j++){
+        graph.pageRankResult.push(graph.listeSommet[j].valuePageRank);
+    }  
+    console.log('produit scalaire :'+tmpScalaire);
+    afficherResultPageRank(graph);
+}
+
+function classement(graph,obj){
+    var compteur =0;
+    for (var i =0; i < graph.listeSommet.length; i++){
+        if (graph.listeSommet[i].valuePageRank > obj.valuePageRank){
+            compteur ++;
+        }
+    }
+    return compteur;
+}
+
+function afficherResultPageRank(graph){
+    var tableauPageRank = document.getElementById('tablePageRank');
+    for (var i =0; i < graph.listeSommet.length; i++){
+        tableauPageRank.innerHTML += "<tr><td>"+graph.listeSommet[i].etiquette+"</td><td>"+graph.pageRankResult[i].toFixed(4)+"</td><td>"+classement(graph,graph.listeSommet[i])+"</td></tr>";
+    }
+}
 
 
 
@@ -313,10 +397,7 @@ function readFile(e, graph) {
         importJSON(content, graph);
     };
     reader.readAsText(selectedFile);
-<<<<<<< HEAD
     
-=======
->>>>>>> 162ce151c87457576a8ba420359a3295a78623a1
 }
 
 // Conversion du fichier JSON en data : import graph : sommets, liens, 
@@ -480,6 +561,7 @@ class Graph {
         this.isRename = false;
         this.tmpName = '';
         this.selectedSommetMenu; 
+        this.pageRankResult = new Array();
     }
 }
 
@@ -489,7 +571,12 @@ class Sommet {
         this.positionX = pos[0];
         this.positionY = pos[1];
         this.id = graph.count;
-        this.etiquette = this.id; 
+        this.etiquette = this.id;
+        this.countPointer = 0; // compteur de lien
+        this.valuePageRank = 0; // value pagerank sommet
+        this.valuePrePageRank = 0; // value pagerank sommet
+        this.classement;
+
         graph.listeSommet.push(this);
     }
 
