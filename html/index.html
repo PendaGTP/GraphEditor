@@ -5,54 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Graph Editor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
     <link rel="stylesheet" href="../styles/font-awesome-4.7.0/css/font-awesome.min.css">
-
-    
-
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="../styles/main.css">  
 </head>
+    <body onload='main()' class="bg">
+        <h1 id="title">Graph Editor</h1>
+        
+
+        <canvas id='canvas' class="context-menu-one btn btn-neutral"></canvas>
+
+        <div class="text-center">
+            <input id="resetGraph" type="button" value="Tout effacer" class="btn btn-danger inputButton">
+            <input id="pageRank" type="button" value="Calcule Algo PageRank" class="btn btn-primary inputButton">
+            <input id="exportPageRank" type="button" value="Exporter données algo PageRank" class="btn btn-primary inputButton">
+            <section>
+                <h2>Le menu contextuel :</h3>
+                <p class="prevention"><b>Un clique droit sur le graph</b> vous permet : Exporter / Importer / Orienté -> le graph </p>
+                <p class="prevention"><b>Un clique droit sur un sommet</b> vous permet : Exporter / Importer / Orienté -> le graph </p>
+            </section>
+        </div>
+        <div id="optionsButton">
+            <input id="export" type="button" value="Exporter">
+            <input type="file" id="fileInput" value="Importer"><label for="fichier a uploader">Importer votre fichier JSON</label>
+            <input type="checkbox" id='oriente'>
+        </div>
+        <table id="tableauPageRank" class="table w-50 text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Sommet</th>
+                <th scope="col">PageRank</th>
+                <th scope="col">Classemnt</th>
+            </tr>
+            </thead>
+            <tbody id="dataTablePageRank">
+            </tbody>
+        </table>
+
+        
+
+
+        <!-- Import du plugin pour le menu contextuel  -->
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 
 
 
+        <script src="../js/FileSaver.js"></script>
+        <script src="../js/main.js"></script>
+    </body>
 
-
-<body onload='main()'>
-    <h1>Graph Editor</h1>
-    <canvas id='canvas' class="context-menu-one btn btn-neutral"></canvas>
-</body>
-
-<input id="resetGraph" type="button" value="Tout effacer">
-<input id="pageRank" type="button" value="Algo PageRank">
-<div id="optionsButton">
-    <input id="export" type="button" value="Exporter">
-    <input type="file" id="fileInput" value="Importer"><label for="fichier a uploader">Importer votre fichier JSON</label>
-    <input type="checkbox" id='oriente'>
-</div>
-
-<table id="tablePageRank">
-    <tr>
-        <th>
-            Page
-        </th>
-        <th>
-            PageRank
-        </th>
-        <th>
-            Classement
-        </th>
-    </tr>
-</table>
-
-<!-- Import du plugin pour le menu contextuel  -->
-<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
-
-
-
-<script src="../js/FileSaver.js"></script>
-<script src="../js/main.js"></script>
 </html>
