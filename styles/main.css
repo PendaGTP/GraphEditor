@@ -2,6 +2,9 @@ body{
   font-family: Arial, sans-serif;
 }
 
+body, html{
+  height: 100%;
+}
 
 
 #canvas {
@@ -27,7 +30,6 @@ body{
  .bg {
   /* The image used */
   background-image: url("../images/backgound.jpg");
-
   /* Full height */
   height: 100%;
 
