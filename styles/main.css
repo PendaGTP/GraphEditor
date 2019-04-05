@@ -1,35 +1,71 @@
 body{
-	font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 
+
 #canvas {
-    border: 5px solid rgb(56, 56, 61);
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
     display: block;
+    padding: 0px;
   }
 #optionsButton{
     display: none;
 }
 
-html {
-  background-image: url("../images/backgound.jpg");
+/* html {
+  background-image: url("../images/backgound.jpg") !important;
   height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+ } */
+
+ .bg {
+  /* The image used */
+  background-image: url("../images/backgound.jpg");
+
+  /* Full height */
+  height: 100%;
 
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
 
- }
 
  h1{
   text-align: center;
   font-size: 4em;
   color: #fff900;
+  padding: 0px;
  }
  section{
    background-color: rgb(16, 127, 224);
  }
+ .table {
+  border-radius: 5px;
+  width: 50%;
+  margin: 0px auto;
+  float: none;
+}
+
+section{
+  font-size: 1.5em;
+  background-color: rgb(142, 168, 168);
+  margin: 10px;
+  width: 40%;
+  margin: auto;
+}
+
+.prevention{
+  color : white;
+}
+.inputButton{
+  margin: 10px;
+}
+
