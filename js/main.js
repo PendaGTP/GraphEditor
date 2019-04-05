@@ -1,5 +1,5 @@
 function main() {
-    var length = 600; // Taille du canevas
+    var length = 800; // Taille du canevas
     var context = initCanvas(length);
     var graph = new Graph();
 
@@ -15,7 +15,6 @@ function main() {
     document.addEventListener('keypress', function(){ onKeyPress(event, graph); });
     document.getElementById('pageRank').addEventListener('click', function () { pageRank(graph); });
     var interval = window.setInterval(function () { draw(graph, context, length); }, 10);
-    var intervalColor = window.setInterval(function () { changeColor(); }, 500);
     document.getElementById('resetGraph').addEventListener('click', function () { resetGraph(graph); });
 }
 
@@ -455,12 +454,11 @@ function readFile(e, graph) {
         importJSON(content, graph);
     };
     reader.readAsText(selectedFile);
-    
+
 }
 
 // Conversion du fichier JSON en data : import graph : sommets, liens, 
 function importJSON(data, graph) {
-    
     var obj = JSON.parse(data);
     graph.name = obj.graph.name;
     graph.graphOriente = obj.graph.directed;
@@ -595,13 +593,6 @@ function createMenu(e, graph) {
 }
 
 
-
-
-function changeColor(){
-    document.getElementById('title').style.color ='#'+(Math.random()*0xFFFFFF<<0).toString(16);
-}
-
-
 // La class Graph : elle représente le graphique 
 class Graph {
     constructor() {
@@ -617,7 +608,7 @@ class Graph {
         this.count = 0;
         this.graphOriente = false;
         this.export = "";
-        this.ballSize = 20;
+        this.ballSize = 30;
         this.algoPageRank = false;
         this.whichSelected;
         this.color = 'red';
@@ -650,12 +641,18 @@ class Sommet {
             if (this == graph.whichSelected) {
                 ctx.fillStyle = graph.selectedColor;
                 ctx.beginPath();
-                ctx.arc(this.positionX, this.positionY, 20, 0, Math.PI * 2, true);
+                ctx.arc(this.positionX, this.positionY, 30, 0, Math.PI * 2, true);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 5;
+                ctx.stroke();
                 ctx.fill();
             } else {
                 ctx.fillStyle = graph.color;
                 ctx.beginPath();
-                ctx.arc(this.positionX, this.positionY, 20, 0, Math.PI * 2, true);
+                ctx.arc(this.positionX, this.positionY, 30, 0, Math.PI * 2, true);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 5;
+                ctx.stroke();
                 ctx.fill();
             } 
             ctx.beginPath();
