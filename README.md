@@ -1,23 +1,31 @@
-# Editeur de Graph
+# Editeur de Graphes
 
-## Quelques info utiles :
+### Algorithme
+* Calcul du page rank
 
-### Un menu contextuel à été ajouté pour gérer les actions :
+### La bibliothèque permet de :
+* créer et modifier un graphe, orienté ou non, en ajoutant des sommets et des arêtes / arcs ;
+* enregistrer / lire un graphe dans / depuis un fichier ;
+* appliquer certains algorithmes sur des graphes
 
-*  supprimer / renommer un sommet
-* export / importer / orienté un graph
-
-### Le format JSON pour l'export du graph est bien respecté
-
-### Le format JSON pour l'export des résultats PageRank suit ce format :
+### Spécifications du format d'export
 
 ```json
 {
-    "algorithm": {
-        "name": "PageRank",
-        "vertices": [{"id": "0"}, {"id": "1"}, {"id": "4"}, {"id": "7"}, {"id": "8"}],
-        "score": [{"score": "2"}, {"score": "3"}, {"score": "5"}, {"score": "6"}],
-        "classement": [{"rank": "2"}, {"rank": "3"}, {"rank": "5"}, {"rank": "6"}]
-    }
+  "graph": {
+    "name": "nom_du_graphe",
+    "directed": "false",
+    "vertices": [
+      { "id": "0", "label": "v1", "pos": {"x":"100", "y":"100"}},
+      { "id": "1", "label": "v7", "pos": {"x":"150", "y":"50"}},
+      { "id": "2", "label": "v19", "pos": {"x":"83", "y":"27"}},
+      ...
+    ],
+    "edges": [
+      {"id1":"0", "id2":"1"},
+      {"id1":"0", "id2":"2"},
+      ...
+    ]
+  }
 }
 ```
